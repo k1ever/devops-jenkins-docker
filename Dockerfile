@@ -1,4 +1,4 @@
-FROM ubuntu
+FROM --platform=amd64 ubuntu
 
 ENV TZ=Europe/Kiev
 
