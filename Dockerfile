@@ -1,16 +1,13 @@
-FROM ubuntu
+FROM alpine
 
-ARG platform="linux/amd64"
+RUN apk add --no-cache php php-apache2 tzdata && \
+    rm -rf /var/www/localhost/htdocs/index.html
 
 ENV TZ=Europe/Kiev
 
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && \
-    apt update && \
-    apt install -y apache2 php && \
-    rm -rf /var/www/html/index.html
-
-COPY src/index.php /var/www/html
+COPY src/index.php /var/www/localhost/htdocs
+COPY src/default.conf /etc/apache2/conf.d
 
 EXPOSE 80
 
-CMD ["apachectl", "-D", "FOREGROUND"]
+ENTRYPOINT ["httpd", "-D", "FOREGROUND"]
